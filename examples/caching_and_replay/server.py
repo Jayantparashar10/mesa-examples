@@ -90,5 +90,3 @@ model = Schelling()
 # Create visualization components
 space_component = make_space_component(agent_portrayal)
 happy_chart = make_plot_component("happy")
-
-

@@ -97,8 +97,13 @@ class CacheableSchelling(CacheableModel):
             else:
                 super().__setattr__(key, value)
 
-            if (hasattr(self, "_cache_state") and was_running and not value
-                and self._cache_state == CacheState.RECORD and not self.run_finished):
+            if (
+                hasattr(self, "_cache_state")
+                and was_running
+                and not value
+                and self._cache_state == CacheState.RECORD
+                and not self.run_finished
+            ):
                 if self.verbose:
                     print(f"Finalizing cache at step {self.step_count}...")
                 self.finish_run()
