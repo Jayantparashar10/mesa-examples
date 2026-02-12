@@ -1,7 +1,6 @@
-"""Cacheable Schelling model visualization with replay functionality.
+"""Schelling model visualization with caching and replay.
 
-This module extends the basic Schelling visualization to support
-caching and replaying simulation runs.
+Extends the standard Schelling visualization to record and replay simulations.
 """
 
 import solara
@@ -27,11 +26,7 @@ model_params["cache_file_path"] = {
 
 @solara.component
 def get_cache_file_status(model):
-    """Display cache file status and usage instructions.
-    
-    Args:
-        model: The CacheableSchelling model instance.
-    """
+    """Display cache status and instructions."""
     
     update_counter.get()
     
@@ -39,18 +34,10 @@ def get_cache_file_status(model):
     exists = cache_file.exists() and cache_file.is_file()
     
     if model._cache_state == CacheState.REPLAY:
-        instructions = (
-            f"Currently replaying cached simulation from step 0 to step {len(model.cache) - 1 if hasattr(model, 'cache') else 'unknown'}.  \n"
-            f"Each step shows the exact state that was recorded."
-        )
+        max_step = len(model.cache) - 1 if hasattr(model, 'cache') else 'unknown'
+        instructions = f"Replaying cached simulation (steps 0-{max_step})  \n"
     elif model._cache_state == CacheState.RECORD:
-        instructions = (
-            "Simulation is being recorded automatically.  \n"
-            f"Cache file is updated after each step and finalized when the simulation stops or converges."
-        )
-    # else:
-    #     status = "⚠️ **Unknown state**"
-    #     instructions = ""
+        instructions = "Recording simulation  \n"
     
     file_size = ""
     if exists:
@@ -64,18 +51,13 @@ def get_cache_file_status(model):
     
     solara.Markdown(
         f"\n \n"
-        f"\n \n"
-        f"\n \n"
-
         f"---  \n"
-        f"**File:** `{cache_file}`{file_size}  \n"
-        f"**Exists:** {'✅ Yes' if exists else '❌ No'}  \n\n"
-        f"{instructions}  \n\n"
-        f"---  \n"
-        f"**Quick Guide:**  \n"
-        f"1. **Record:** Set file path, uncheck 'Replay', click Reset & Run  \n"
-        f"2. **Replay:** Check 'Replay', click Reset & Run to see recorded simulation  \n"
-        f"*Note: Cache is saved automatically during and at the end of the run.*"
+        f"**Cache File:** `{cache_file}`{file_size}  \n"
+        f"{instructions}  \n"
+        f"**How to use:**  \n"
+        f"• **Record:** Uncheck 'Replay', click Reset & Run  \n"
+        f"• **Replay:** Check 'Replay', click Reset & Run  \n"
+        f"*Cache is saved automatically when the simulation completes*"
     )
 
 

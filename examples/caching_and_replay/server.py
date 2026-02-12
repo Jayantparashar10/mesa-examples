@@ -1,6 +1,6 @@
-"""Schelling segregation model visualization using Mesa 3.x Solara API.
+"""Schelling model visualization components.
 
-This module provides visualization components for the Schelling segregation model.
+Standard visualization for the Schelling segregation model.
 """
 
 import solara
@@ -13,11 +13,7 @@ from model import Schelling
 
 @solara.component
 def get_happy_agents(model):
-    """Display the count and percentage of happy agents in the model.
-    
-    Args:
-        model: The Schelling model instance.
-    """
+    """Display count and percentage of happy agents."""
     update_counter.get()
     
     total_agents = len(model.agents)
@@ -45,14 +41,7 @@ def get_happy_agents(model):
 
 
 def agent_portrayal(agent):
-    """Define how agents are displayed in the grid visualization.
-    
-    Args:
-        agent: The agent to portray.
-        
-    Returns:
-        AgentPortrayalStyle: Visual properties for the agent.
-    """
+    """Define agent visualization properties."""
     if agent.type == 0:
         return AgentPortrayalStyle(color="red", size=50)
     return AgentPortrayalStyle(color="blue", size=50)
