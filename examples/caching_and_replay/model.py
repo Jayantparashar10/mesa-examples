@@ -25,7 +25,11 @@ class SchellingAgent(CellAgent):
 
         # If unhappy, move:
         if similar < self.model.homophily:
-            self.cell = self.model.grid.select_random_empty_cell()
+            try:
+                self.cell = self.model.grid.select_random_empty_cell()
+            except IndexError:
+                # No empty cells available, agent stays in place (can't move)
+                pass
         else:
             self.model.happy += 1
 
